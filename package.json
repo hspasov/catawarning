@@ -1,0 +1,23 @@
+{
+  "name": "catawarning",
+  "version": "1.0.0",
+  "description": "MPS project - Emergency alert system (catastrophe warning)",
+  "main": "index.js",
+  "repository": "https://github.com/hspasov/catawarning.git",
+  "author": "Hristo Spasov <hristo_sp99@abv.bg>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-send": "^4.1.3",
+    "koa-socket": "^4.4.0",
+    "koa-static": "^4.0.2",
+    "mysql": "^2.15.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
