@@ -9,8 +9,6 @@ socket.on("connect", () => {
 });
 
 socket.on("warning", data => {
-    console.log(data);
-    console.log(data.length);
     const speaker = new Speaker({
         channels: 1,
         bitDepth: 32,
@@ -20,4 +18,3 @@ socket.on("warning", data => {
     bufferStream.end(data);
     bufferStream.pipe(speaker);
 });
-

@@ -15,12 +15,13 @@ const constraints = {
 
 let recorder;
 let blob;
+let stream;
 
 const actionButton = document.getElementById("action");
 
 async function record() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
         const audioContext = new AudioContext;
         recorder = new Recorder(audioContext.createMediaStreamSource(stream));
         recorder.record();
@@ -31,16 +32,18 @@ async function record() {
     }
 }
 
-async function stop() {
+function stop() {
     recorder.stop();
     recorder.exportWAV(b => {
         blob = b;
         actionButton.onclick = play;
         actionButton.innerHTML = "Play";
     });
+    stream.getAudioTracks().forEach(track => track.stop());
+    console.log(stream);
 }
 
-async function play() {
+function play() {
     const reader = new FileReader();
     reader.onload = e => {
         const player = new Audio(e.target.result);
