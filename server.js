@@ -49,6 +49,7 @@ io.on("audio", (ctx, data) => {
     console.log("there is audio");
     console.log(data);
     console.log(data.length);
+    io.broadcast("warning", data);
 });
 
 app.listen(3000);

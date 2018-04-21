@@ -19,11 +19,13 @@
     "mysql": "^2.15.0",
     "recorderjs": "^1.0.1",
     "socket.io-client": "^2.1.0",
+    "speaker": "^0.4.1",
     "workerify": "^1.1.0"
   },
   "scripts": {
-    "start": "node server.js",
-    "pack": "browserify index.js -o ./public/js/bundle.js"
+    "server": "node server.js",
+    "pack": "browserify index.js -o ./public/js/bundle.js",
+    "device": "node device.js"
   },
   "devDependencies": {
     "browserify": "^16.2.0"
