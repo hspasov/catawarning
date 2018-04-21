@@ -5,14 +5,12 @@
     <title>Catawarning</title>
   </head>
   <body>
-    <div>
-      <form action="http://localhost:3000/message" method="POST">
-        <label>Key: <input name="key" type="text" /></label>
-        <input type="submit" value="Submit" />
-      </form>
-      <audio controls="controls">
-        <source id="audioplay" type="audio/wav">
-      </audio>
+    <div id="content">
+      <button id="action">Record</button>
+      <label>Key:
+        <input id="key" name="key" type="text" />
+      </label>
+      <button id="submit">Submit</button>
     </div>
     <script src="js/bundle.js"></script>
   </body>

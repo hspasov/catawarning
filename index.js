@@ -14,20 +14,47 @@ const constraints = {
 };
 
 let recorder;
+let blob;
 
-navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-    let audioContext = new AudioContext;
-    recorder = new Recorder(audioContext.createMediaStreamSource(stream));
-    console.log(recorder);
-    recorder.record();
-    console.log("Started recording");
-    setTimeout(() => {
-        recorder.stop();
-        console.log("Stopped recording");
-        recorder.exportWAV(blob => {
-            socket.emit("audio", blob);
-        });
-    }, 5000);
-}).catch(error => {
-    console.log(error);
-});
+const actionButton = document.getElementById("action");
+
+async function record() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const audioContext = new AudioContext;
+        recorder = new Recorder(audioContext.createMediaStreamSource(stream));
+        recorder.record();
+        actionButton.onclick = stop;
+        actionButton.innerHTML = "Stop"
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function stop() {
+    recorder.stop();
+    recorder.exportWAV(b => {
+        blob = b;
+        actionButton.onclick = play;
+        actionButton.innerHTML = "Play";
+    });
+}
+
+async function play() {
+    const reader = new FileReader();
+    reader.onload = e => {
+        const player = new Audio(e.target.result);
+        player.play();
+    };
+    reader.readAsDataURL(blob);
+}
+
+function submit() {
+    const key = document.getElementById("key").value;
+    socket.emit("audio", { blob, key });
+}
+
+actionButton.onclick = record;
+actionButton.innerHTML = "Record";
+
+document.getElementById("submit").onclick = submit;

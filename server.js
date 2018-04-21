@@ -29,13 +29,6 @@ router.get("/", async (ctx, next) => {
     await send(ctx, "public/html/index.html");
 });
 
-router.post("/message", async (ctx, next) => {
-    const result = await db.queryAsync("SELECT verify(?) AS isApproved;", [ctx.request.body.key]);
-    console.log(result[0].isApproved);
-    console.log(ctx.request.body);
-    console.log(ctx.body);
-});
-
 app.use(router.routes());
 app.use(router.allowedMethods());
 
@@ -45,11 +38,25 @@ io.on("connection", socket => {
     console.log("connected with socket");
 });
 
-io.on("audio", (ctx, data) => {
-    console.log("there is audio");
-    console.log(data);
-    console.log(data.length);
-    io.broadcast("warning", data);
+io.on("audio", async (ctx, data) => {
+    if (!data.key || !data.blob) {
+        // todo
+        return;
+    } else {
+        try {
+            const result = await db.queryAsync("SELECT verify(?) AS isApproved;", [data.key]);
+            if (result[0].isApproved) {
+                io.broadcast("warning", data.blob);
+                // todo
+                return;
+            } else {
+                // todo
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 });
 
 app.listen(3000);

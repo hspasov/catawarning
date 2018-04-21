@@ -19,6 +19,5 @@ socket.on("warning", data => {
     let bufferStream = new stream.PassThrough();
     bufferStream.end(data);
     bufferStream.pipe(speaker);
-    console.log("playing audio, maybe?");
 });
 
