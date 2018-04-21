@@ -1,5 +1,12 @@
 const Recorder = require("recorderjs");
 const FileSaver = require("file-saver");
+const io = require("socket.io-client");
+
+const socket = io("http://localhost:3000/audio");
+
+socket.on("connect", () => {
+    console.log("connected with socket");
+});
 
 const constraints = {
     audio: true,
@@ -18,11 +25,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(stream => {
         recorder.stop();
         console.log("Stopped recording");
         recorder.exportWAV(blob => {
-            console.log(blob);
-            FileSaver.saveAs(blob, "it_works.wav");
-            let sound = URL.createObjectURL(blob);
-            console.log(sound);
-            document.getElementById("audioplay").setAttribute("src", sound);
+            socket.emit("audio", blob);
         });
     }, 5000);
 }).catch(error => {

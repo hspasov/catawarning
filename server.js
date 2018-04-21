@@ -17,7 +17,7 @@ const db = bluebird.promisifyAll(mysql.createPool({
 }));
 
 const app = new Koa();
-const io = new IO();
+const io = new IO("audio");
 const router = new Router();
 
 app.use(logger());
@@ -32,11 +32,23 @@ router.get("/", async (ctx, next) => {
 router.post("/message", async (ctx, next) => {
     const result = await db.queryAsync("SELECT verify(?) AS isApproved;", [ctx.request.body.key]);
     console.log(result[0].isApproved);
+    console.log(ctx.request.body);
+    console.log(ctx.body);
 });
 
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 io.attach(app);
+
+io.on("connection", socket => {
+    console.log("connected with socket");
+});
+
+io.on("audio", (ctx, data) => {
+    console.log("there is audio");
+    console.log(data);
+    console.log(data.length);
+});
 
 app.listen(3000);
